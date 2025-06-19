@@ -1,0 +1,36 @@
+.home-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.button-group button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.slideshow-container {
+  margin-top: 30px;
+}
+
+.slideshow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.slide-image {
+  width: 400px;
+  height: auto;
+  margin: 0 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
