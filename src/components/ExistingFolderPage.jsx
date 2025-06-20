@@ -4,7 +4,7 @@ import axios from 'axios';
 function ExistingFolderPage() {
   const [folders, setFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState('');
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     fetchFolders();
@@ -20,18 +20,24 @@ function ExistingFolderPage() {
   };
 
   const handleUpload = async () => {
-    if (!selectedFolderId || !file) {
-      alert('Please select a folder and choose a file');
+    if (!selectedFolderId || files.length === 0) {
+      alert('Please select a folder and choose at least one file');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
 
     try {
-      await axios.post(`http://localhost:5000/api/upload/existing/${selectedFolderId}`, formData);
-      alert('File uploaded successfully');
-      setFile(null);
+      await axios.post(`http://localhost:5000/api/upload/existing/${selectedFolderId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Files uploaded successfully');
+      setFiles([]);
     } catch (err) {
       console.error(err);
       alert('Upload failed');
@@ -44,7 +50,7 @@ function ExistingFolderPage() {
     try {
       await axios.delete(`http://localhost:5000/api/folders/${folderId}`);
       alert('Folder deleted successfully');
-      fetchFolders(); // refresh the list
+      fetchFolders();
     } catch (err) {
       console.error(err);
       alert('Failed to delete folder');
@@ -52,43 +58,56 @@ function ExistingFolderPage() {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '30px' }}>
-      <h1>Upload to Existing Folder</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 p-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-xl animate-fadeIn">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Upload to Existing Folder</h2>
 
-      <select onChange={(e) => setSelectedFolderId(e.target.value)} value={selectedFolderId}>
-        <option value="">Select Folder</option>
-        {folders.map((folder) => (
-          <option key={folder.id} value={folder.id}>
-            {folder.name}
-          </option>
-        ))}
-      </select>
+        <select
+          onChange={(e) => setSelectedFolderId(e.target.value)}
+          value={selectedFolderId}
+          className="w-full mb-4 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        >
+          <option value="">Select Folder</option>
+          {folders.map((folder) => (
+            <option key={folder.id} value={folder.id}>
+              {folder.name}
+            </option>
+          ))}
+        </select>
 
-      <div style={{ marginTop: '10px' }}>
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button onClick={handleUpload} style={{ marginLeft: '10px' }}>
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setFiles(Array.from(e.target.files))}
+          className="w-full mb-4 text-gray-700"
+        />
+
+        <button
+          onClick={handleUpload}
+          className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 mb-6"
+        >
           Upload
         </button>
-      </div>
 
-      <h2 style={{ marginTop: '30px' }}>Folders</h2>
-      {folders.length > 0 ? (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {folders.map((folder) => (
-            <li key={folder.id} style={{ marginBottom: '10px' }}>
-              {folder.name}{' '}
-              <button
-                onClick={() => handleDelete(folder.id)}
-                style={{ color: 'white', background: 'red', border: 'none', padding: '4px 8px' }}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No folders found</p>
-      )}
+        <h3 className="text-xl font-semibold text-gray-800 mb-3">Folders</h3>
+        {folders.length > 0 ? (
+          <ul className="space-y-3">
+            {folders.map((folder) => (
+              <li key={folder.id} className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-lg shadow">
+                <span className="text-gray-800 font-medium">{folder.name}</span>
+                <button
+                  onClick={() => handleDelete(folder.id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">No folders found</p>
+        )}
+      </div>
     </div>
   );
 }

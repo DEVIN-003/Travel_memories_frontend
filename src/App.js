@@ -8,12 +8,14 @@ import ExistingFolderPage from './components/ExistingFolderPage';
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/new-folder" element={<NewFolderPage />} />
-        <Route path="/existing-folder" element={<ExistingFolderPage />} />
-      </Routes>
+      <div className="min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-gray-900">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/new-folder" element={<NewFolderPage />} />
+          <Route path="/existing-folder" element={<ExistingFolderPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

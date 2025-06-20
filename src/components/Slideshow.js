@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './HomePage.css';
 
-function HomePage() {
-  const navigate = useNavigate();
-  const [images, setImages] = useState([]);
+function Slideshow({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    fetchImages();
-  }, []);
-
-  const fetchImages = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/gallery');
-      setImages(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    if (images.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -30,30 +20,40 @@ function HomePage() {
   };
 
   return (
-    <div className="home-container">
-      <h1>Travel Memories</h1>
-      <div className="button-group">
-        <button onClick={() => navigate('/new-folder')}>New Folder</button>
-        <button onClick={() => navigate('/existing-folder')}>Existing Folder</button>
-      </div>
+    <div className="relative w-full h-[400px] max-w-3xl flex items-center justify-center rounded-lg overflow-hidden shadow-lg bg-white">
+      {images.length > 0 ? (
+        <>
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 text-3xl text-indigo-600 font-bold bg-white/80 rounded-full px-2 py-1 hover:bg-white transition"
+          >
+            ‹
+          </button>
 
-      <div className="slideshow-container">
-        {images.length > 0 ? (
-          <div className="slideshow">
-            <button onClick={prevSlide} className="arrow">&lt;</button>
+          <a href={images[currentIndex].viewUrl} target="_blank" rel="noopener noreferrer">
             <img
-              src={images[currentIndex].link}   // ✅ THIS is the actual image link
+              src={images[currentIndex].link} // ✅ USE main link
               alt={images[currentIndex].name}
-              className="slide-image"
+              className="object-cover w-full h-[400px] animate-fadeIn"
+              onError={(e) => {
+                console.error(`Failed to load image: ${images[currentIndex].link}`);
+                e.target.style.display = 'none';
+              }}
             />
-            <button onClick={nextSlide} className="arrow">&gt;</button>
-          </div>
-        ) : (
-          <p>No images available</p>
-        )}
-      </div>
+          </a>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 text-3xl text-indigo-600 font-bold bg-white/80 rounded-full px-2 py-1 hover:bg-white transition"
+          >
+            ›
+          </button>
+        </>
+      ) : (
+        <p className="text-lg text-gray-800">No images available</p>
+      )}
     </div>
   );
 }
 
-export default HomePage;
+export default Slideshow;

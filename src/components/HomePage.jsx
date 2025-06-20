@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './HomePage.css';
+import Slideshow from './Slideshow';
 
 function HomePage() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     fetchImages();
@@ -15,48 +14,32 @@ function HomePage() {
   const fetchImages = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/gallery');
-      const formattedImages = res.data.map(file => ({
-        id: file.id,
-        name: file.name,
-        link: `https://drive.google.com/thumbnail?id=${file.id}`, // ✅ Updated here
-      }));
-      setImages(formattedImages);
+      setImages(res.data);
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching images:', err);
     }
   };
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
   return (
-    <div className="home-container">
-      <h1>Travel Memories</h1>
-      <div className="button-group">
-        <button onClick={() => navigate('/new-folder')}>New Folder</button>
-        <button onClick={() => navigate('/existing-folder')}>Existing Folder</button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 p-4 text-white">
+      <h1 className="text-4xl font-extrabold mb-6 animate-fadeIn">Travel Memories</h1>
+
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => navigate('/new-folder')}
+          className="bg-white text-indigo-700 px-6 py-2 rounded-lg shadow-md font-medium hover:bg-gray-100 transition"
+        >
+          New Folder
+        </button>
+        <button
+          onClick={() => navigate('/existing-folder')}
+          className="bg-white text-indigo-700 px-6 py-2 rounded-lg shadow-md font-medium hover:bg-gray-100 transition"
+        >
+          Existing Folder
+        </button>
       </div>
 
-      <div className="slideshow-container">
-        {images.length > 0 ? (
-          <div className="slideshow">
-            <button onClick={prevSlide} className="arrow">&lt;</button>
-            <img
-              src={images[currentIndex].link}
-              alt={images[currentIndex].name}
-              className="slide-image"
-            />
-            <button onClick={nextSlide} className="arrow">&gt;</button>
-          </div>
-        ) : (
-          <p>Loading images...</p>
-        )}
-      </div>
+      <Slideshow images={images} />
     </div>
   );
 }

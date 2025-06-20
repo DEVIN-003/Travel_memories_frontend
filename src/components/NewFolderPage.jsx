@@ -9,7 +9,7 @@ function NewFolderPage() {
 
   const handleUpload = async () => {
     if (!folderName || files.length === 0) {
-      alert('Enter folder name and choose files.');
+      alert('Please enter a folder name and select files.');
       return;
     }
 
@@ -18,8 +18,13 @@ function NewFolderPage() {
     Array.from(files).forEach((file) => formData.append('files', file));
 
     try {
-      await axios.post('http://localhost:5000/api/upload/new-folder', formData);
-      alert('Uploaded successfully');
+      const response = await axios.post('http://localhost:5000/api/upload/new-folder', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      alert('Files uploaded successfully');
       navigate('/home');
     } catch (error) {
       console.error(error);
@@ -28,20 +33,33 @@ function NewFolderPage() {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h2>Create New Folder</h2>
-      <input
-        type="text"
-        placeholder="Folder Name"
-        value={folderName}
-        onChange={(e) => setFolderName(e.target.value)}
-      /><br /><br />
-      <input
-        type="file"
-        multiple
-        onChange={(e) => setFiles(e.target.files)}
-      /><br /><br />
-      <button onClick={handleUpload}>Done</button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md animate-fadeIn">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Create New Folder</h2>
+
+        <input
+          type="text"
+          placeholder="Folder Name"
+          value={folderName}
+          onChange={(e) => setFolderName(e.target.value)}
+          required
+          className="w-full px-4 py-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setFiles(e.target.files)}
+          className="w-full mb-6 text-gray-700"
+        />
+
+        <button
+          onClick={handleUpload}
+          className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300"
+        >
+          Done
+        </button>
+      </div>
     </div>
   );
 }
