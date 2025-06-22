@@ -1,0 +1,24 @@
+/* Fade-in animation for the upload box */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Style for the input fields and button is handled by Tailwind */
+
+/* Optional: Add some glowing effect to the heading text if desired */
+.new-folder-heading {
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* General page styles are handled by Tailwind */

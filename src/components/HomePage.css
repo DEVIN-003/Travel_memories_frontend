@@ -1,0 +1,112 @@
+/* Main heading animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 1s ease forwards;
+}
+
+/* Blooming wave animation for each letter */
+@keyframes bloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.bloom-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: bloom 1.5s forwards;
+}
+
+.bloom-container {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.5;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  max-width: 90%;
+  text-align: left;
+}
+
+/* Heading and Subheading styles */
+h1 {
+  font-weight: 900;
+  font-size: 4rem;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Slideshow & Quote container layout: 60% / 40% */
+.homepage-content {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.slideshow-side {
+  width: 60%;
+}
+
+.quote-side {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 1rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .homepage-content {
+    flex-direction: column;
+  }
+
+  .bloom-container {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .slideshow-side,
+  .quote-side {
+    width: 100%;
+  }
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake {
+  animation-name: shake;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Individual animation delays for distinct vibration effect */
+.shake.delay-0 {
+  animation-delay: 0s;
+}
+
+.shake.delay-1 {
+  animation-delay: 0.2s;
+}
