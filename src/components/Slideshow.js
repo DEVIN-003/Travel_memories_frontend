@@ -64,7 +64,7 @@ const Slideshow = ({ images }) => {
     >
       {images.length > 0 && (
         <img
-          src={`http://localhost:5000/api/image/${images[currentIndex].id}`}
+          src={`https://travel-memories-backend.vercel.app/api/image/${images[currentIndex].id}`}
           alt={images[currentIndex].name}
           className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-[3000ms] ${
             fade ? 'opacity-100' : 'opacity-0'

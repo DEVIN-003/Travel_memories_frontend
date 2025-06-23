@@ -60,7 +60,7 @@ function HomePage() {
 
   const fetchImages = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/gallery');
+      const res = await axios.get('https://travel-memories-backend.vercel.app/api/gallery');
       const formattedImages = res.data.map((file) => ({
         id: file.id,
         name: file.name,

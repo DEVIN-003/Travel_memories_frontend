@@ -13,7 +13,7 @@ function ExistingFolderPage() {
 
   const fetchFolders = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/folders');
+      const res = await axios.get('https://travel-memories-backend.vercel.app/api/folders');
       setFolders(res.data);
     } catch (err) {
       console.error('Error fetching folders:', err);
@@ -32,7 +32,7 @@ function ExistingFolderPage() {
     }
 
     try {
-      await axios.post(`http://localhost:5000/api/upload/existing/${selectedFolderId}`, formData, {
+      await axios.post(`https://travel-memories-backend.vercel.app/api/upload/existing/${selectedFolderId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -49,7 +49,7 @@ function ExistingFolderPage() {
     if (!window.confirm('Are you sure you want to delete this folder?')) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/folders/${folderId}`);
+      await axios.delete(`https://travel-memories-backend.vercel.app/api/folders/${folderId}`);
       alert('Folder deleted successfully');
       fetchFolders();
     } catch (err) {

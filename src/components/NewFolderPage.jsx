@@ -19,7 +19,7 @@ function NewFolderPage() {
     Array.from(files).forEach((file) => formData.append('files', file));
 
     try {
-      const response = await axios.post('http://localhost:5000/api/upload/new-folder', formData, {
+      const response = await axios.post('https://travel-memories-backend.vercel.app/api/upload/new-folder', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
